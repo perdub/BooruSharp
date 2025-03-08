@@ -1,4 +1,7 @@
-﻿namespace BooruSharp.Booru
+﻿using BooruSharp.Search.Post;
+using System.Threading.Tasks;
+
+namespace BooruSharp.Booru
 {
     /// <summary>
     /// Danbooru.
@@ -15,5 +18,10 @@
 
         /// <inheritdoc/>
         public override bool IsSafe => false;
+
+        public override Task<SearchResult[]> GetLastPostsAsync(int limit, int page, params string[] tagsArg)
+        {
+            return base.GetLastPostsAsync(limit, page, "page", tagsArg);
+        }
     }
 }

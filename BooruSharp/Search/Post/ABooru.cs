@@ -206,6 +206,25 @@ namespace BooruSharp.Booru
             return GetPostsSearchResult(JsonConvert.DeserializeObject(await GetJsonAsync(CreateUrl(_imageUrl, "limit=" + limit, TagsToString(tagsArg)))));
         }
 
+        /// <summary>
+        /// Gets the latest posts on the website. If <paramref name="tagsArg"/> array is
+        /// specified and isn't empty, latest posts containing those tags will be returned.
+        /// </summary>
+        /// <param name="limit">The number of posts to get.</param>
+        /// <param name="tagsArg">The optional array of tags that must be contained in the posts.</param>
+        /// <param name="page">The page number</param>
+        /// <returns>The task object representing the asynchronous operation.</returns>
+        /// <exception cref="System.Net.Http.HttpRequestException"/>
+        public virtual async Task<Search.Post.SearchResult[]> GetLastPostsAsync(int limit, int page, params string[] tagsArg)
+        {
+            return await GetLastPostsAsync(limit, page, "pid", tagsArg);
+        }
+
+        internal virtual async Task<Search.Post.SearchResult[]> GetLastPostsAsync(int limit, int page, string pageParamId, params string[] tagsArg)
+        {
+            return GetPostsSearchResult(JsonConvert.DeserializeObject(await GetJsonAsync(CreateUrl(_imageUrl, "limit=" + limit, pageParamId + "=" + page, TagsToString(tagsArg)))));
+        }
+
         private async Task<Search.Post.SearchResult> GetSearchResultFromUrlAsync(string url)
         {
             return GetPostSearchResult(ParseFirstPostSearchResult(JsonConvert.DeserializeObject(await GetJsonAsync(url))));
